@@ -1,9 +1,6 @@
 <?php
 session_start();
 include ('db.php');
-if (isset($_FILES['profileimg']['name']) and $_FILES['profileimg']['size'] > 0){
-    move_uploaded_file($_FILES['profileimg']['tmp_name'], 'public/img');
-}
 var_dump($_FILES);
 var_dump($_POST);
 if ($_SESSION['login']){
