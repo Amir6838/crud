@@ -64,7 +64,7 @@ if (!empty($_POST['username']) and !empty($_POST['email'])) {
                         <div class="card-body p-5">
                             <h2 class="text-uppercase text-center mb-5">Create an account</h2>
 
-                            <form>
+                            <form method="post">
 
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="form3Example1cg">UserName</label>

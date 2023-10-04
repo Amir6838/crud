@@ -18,7 +18,7 @@ class DataBase
     {
         $password = md5($password);
         $this->conn->exec("INSERT INTO `user` (`username`, `email`, `password`) VALUES ('$username','$email','$password')");
-        echo 'ok';
+        echo "INSERT INTO `user` (`username`, `email`, `password`) VALUES ('$username','$email','$password')";
     }
 
     function search($username = '', $email = '', $password = ''){
@@ -30,6 +30,38 @@ class DataBase
             return false;
         else
         return $search->fetch();
+    }
+
+    function update($usernameid, $username = null, $email = null, $password = null, $fname = null, $lname = null, $profile = null){
+        $query = "UPDATE `user` SET ";
+
+        if ($username != null and strcmp($username , '') != 0){
+            $query .= "`username`='$username',";
+        }
+
+        if ($email != null and strcmp($email , '') != 0){
+            $query .= "`$email`='$email',";
+        }
+
+        if ($password != null and strcmp($password , '') != 0){
+            $query .= "`$password`='$password',";
+        }
+
+        if ($fname != null and strcmp($fname , '') != 0){
+            $query .= "`username`='$fname',";
+        }
+
+        if ($lname != null and strcmp($lname , '') != 0){
+            $query .= "`username`='$lname',";
+        }
+
+        if ($profile != null and strcmp($profile , '') != 0){
+            $query .= "`username`='$profile',";
+        }
+        $query = substr($query,0,-1) . "WHERE `username` = $usernameid";
+        echo $query;
+        //$this->conn->exec($query);
+
     }
 
 }

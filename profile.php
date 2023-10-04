@@ -1,14 +1,25 @@
 <?php
 session_start();
-include ('db.php');
-var_dump($_FILES);
+include('db.php');
 var_dump($_POST);
-if ($_SESSION['login']){
+var_dump($_FILES);
+if ($_SESSION['login']) {
     $db = new DataBase();
     $user = $db->search($_SESSION['username']);
     var_dump($user);
-}else{
+} else {
     header('location:index.php');
+}
+
+if (!empty($_POST)) {
+    if (strcmp($_POST['password'], $_POST['newpassword']) == 0) {
+        if (strcmp(md5($_POST['password']), $user['password']) == 0) {
+            if (strcmp($user['username'], $_POST['username']) == 0) {
+                $db->update($user['username'], $_POST['username'], $_POST['email'], $_POST['password'], $_POST['fname']
+                    , $_POST['lname'], $_POST['profile']);
+            }
+        }
+    }
 }
 ?>
 <!doctype html>
@@ -27,11 +38,14 @@ if ($_SESSION['login']){
 
 </style>
 <body>
-<form class="container rounded bg-white mt-5" name="uploadForm" method="post" enctype="multipart/form-data" action="profile.php">
+<form class="container rounded bg-white mt-5" name="uploadForm" method="post" enctype="multipart/form-data"
+      action="profile.php">
     <div class="row">
         <div class="col-md-4 border-right">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                <img class="rounded-circle mt-5" src="public/img/vector.jpg" width="90">
+                <img class="rounded-circle mt-5"
+                     src="<?php echo ($user['profile'] != NULL) ? $user['profile'] : 'public/img/vector.jpg' ?>"
+                     width="90">
                 <span class="font-weight-bold">John Doe</span>
                 <span class="text-black-50">john_doe12@bbb.com</span>
                 <span>United States</span></div>
@@ -45,26 +59,39 @@ if ($_SESSION['login']){
                     <h6 class="text-right">Edit Profile</h6>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-6"><input type="text" name="firstname" class="form-control" placeholder="first name"></div>
-                    <div class="col-md-6"><input type="text" name="lastname" class="form-control" placeholder="LastName"></div>
+                    <div class="col-md-6"><input type="text"
+                                                 name="firstname" class="form-control"
+                                                 placeholder="<?php echo ($user['fname'] != NULL) ? $user['fname'] : 'The Fname is not set'; ?>">
+                    </div>
+                    <div class="col-md-6"><input type="text"
+                                                 name="lastname" class="form-control"
+                                                 placeholder="<?php echo ($user['lname'] != NULL) ? $user['lname'] : 'The Lname is not set'; ?>">
+                    </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-6"><input type="text" name="username" class="form-control" value="<?php echo $user['username']; ?>" placeholder="UserName"></div>
-                    <div class="col-md-6"><input type="text" name="password" class="form-control" placeholder="Email" value="<?php echo $user['email']; ?>"></div>
+                    <div class="col-md-6"><input type="text" name="username" class="form-control"
+                                                 placeholder="<?php echo $user['username']; ?>"></div>
+                    <div class="col-md-6"><input type="text" name="email" class="form-control"
+                                                 placeholder="<?php echo $user['email']; ?>"
+                        ></div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-6"><input type="password" name="password" class="form-control" placeholder="password" value="********"></div>
-                    <div class="col-md-6"><input type="password" name="reaptpassword" class="form-control" value="*********" placeholder="Reapit Password"></div>
+                    <div class="col-md-6"><input type="password" name="password" class="form-control"
+                                                 placeholder="password"></div>
+                    <div class="col-md-6"><input type="password" name="newpassword" class="form-control"
+                                                 placeholder="New Password"></div>
                 </div>
-<!--                <div class="row mt-3">-->
-<!--                    <div class="col-md-6"><input type="text" class="form-control" placeholder="Bank Name" value="Bank of America"></div>-->
-<!--                    <div class="col-md-6"><input type="text" class="form-control" value="043958409584095" placeholder="Account Number"></div>-->
-<!--                </div>-->
+                <!--                <div class="row mt-3">-->
+                <!--                    <div class="col-md-6"><input type="text" class="form-control" placeholder="Bank Name" value="Bank of America"></div>-->
+                <!--                    <div class="col-md-6"><input type="text" class="form-control" value="043958409584095" placeholder="Account Number"></div>-->
+                <!--                </div>-->
                 <div class="row mt-3">
                     <label for="formFileDisabled" class="form-label col-3">Profile Picture</label>
-                    <input class="form-control col-3" name="profileimg" type="file" id="formFileDisabled" >
+                    <input class="form-control col-3" name="profileimg" type="file" id="formFileDisabled">
                 </div>
-                <div class="row mt-5 text-right"><button class="btn btn-primary profile-button" type="submit">Edit Profile</button></div>
+                <div class="row mt-5 text-right">
+                    <button class="btn btn-primary profile-button" type="submit">Edit Profile</button>
+                </div>
             </div>
         </div>
     </div>

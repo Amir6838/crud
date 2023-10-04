@@ -7,7 +7,7 @@ var_dump($_SESSION);
 //var_dump($db->search('','',$_POST['password']));
 if (!empty($_POST['username-email']) and !empty($_POST['password'])) {
     if ($db->search($_POST['username-email'], $_POST['username-email']) and $db->search('', '', $_POST['password'])) {
-        $_SESSION['username'] = $db->search($_POST['username-email'], $_POST['username-email'])[0]['username'];
+        $_SESSION['username'] = $db->search($_POST['username-email'], $_POST['username-email'])['username'];
         $_SESSION['login'] = true;
     }
     if (isset($_SESSION['login'])) {
