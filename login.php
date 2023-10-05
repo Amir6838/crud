@@ -5,9 +5,10 @@ session_start();
 var_dump($_POST);
 var_dump($_SESSION);
 //var_dump($db->search('','',$_POST['password']));
-if (!empty($_POST['username-email']) and !empty($_POST['password'])) {
-    if ($db->search($_POST['username-email'], $_POST['username-email']) and $db->search('', '', $_POST['password'])) {
-        $_SESSION['username'] = $db->search($_POST['username-email'], $_POST['username-email'])['username'];
+if (!empty($_POST['email']) and !empty($_POST['password'])) {
+    $user = $db->search('', $_POST['email']);
+    if (strcmp($user['password'], $_POST['password'] == 0)) {
+        $_SESSION['username'] = $user['username'];
         $_SESSION['login'] = true;
     }
     if (isset($_SESSION['login'])) {
@@ -44,7 +45,7 @@ if (!empty($_POST['username-email']) and !empty($_POST['password'])) {
 
                             <div class="form-outline form-white mb-4">
                                 <label class="form-label" for="typeEmailX">Email</label>
-                                <input type="text" id="typeEmailX" name="username-email"
+                                <input type="text" id="typeEmailX" name="email"
                                        class="form-control form-control-lg"
                                        placeholder="Enter your Email"/>
 

@@ -2,23 +2,22 @@
 session_start();
 include('db.php');
 include('image_service.php');
-
+var_dump($_SESSION);
+var_dump($_FILES);
 if ($_SESSION['login']) {
     $db = new DataBase();
     $user = $db->search($_SESSION['username']);
 } else {
     header('location:index.php');
 }
-
 if (!empty($_FILES)) {
     if ($_FILES['profileimg']['size'] > 0 and $_FILES['profileimg']['size'] < 1048576 and strcmp($_FILES['profileimg']['type'], 'image/jpeg') == 0) {
         uploadImg($user['username'], $_FILES['profileimg']);
         $db->update($user['username'], null, null, null, null
             , null, "public/img/profile/" . $user['username'] . '.jpg');
+        //header('location:profile.php');
     }
 }
-
-
 if (!empty($_POST)) {
     if (strcmp($_POST['password'], $_POST['newpassword']) == 0) {
         if (strcmp(md5($_POST['password']), $user['password']) == 0) {

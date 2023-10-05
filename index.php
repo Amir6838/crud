@@ -1,6 +1,5 @@
 <?php
 session_start();
-var_dump($_SESSION);
 if (isset($_SESSION['username'])){
     $username = 'Welcome' . $_SESSION['username'];
 }else{
@@ -46,6 +45,7 @@ if (isset($_GET)){
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="index.php?edit">Edit Profile</a></li>
                         <li><a class="dropdown-item" href="#">Delete Account</a></li>
+                        <li><a class="dropdown-item" href="#">Change Password</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="index.php?exit">Exit</a></li>
                     </ul>
