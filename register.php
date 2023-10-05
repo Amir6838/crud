@@ -1,7 +1,6 @@
 <?php
 include('db.php');
 $db = new DataBase();
-var_dump($_POST);
 if (!empty($_POST['username']) and !empty($_POST['email'])) {
     if ($db->search($_POST['username'], $_POST['email']) != false) {
         ?>
@@ -16,7 +15,7 @@ if (!empty($_POST['username']) and !empty($_POST['email'])) {
             ثبت نام شما با موفقیت انجام شد
         </div>
         <?php
-        header('location:layout/registercont.php');
+        header('location:layout/login.php');
     }
 }
 ?>

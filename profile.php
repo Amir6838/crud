@@ -12,7 +12,7 @@ if (!empty($_FILES)) {
     if ($_FILES['profileimg']['size'] > 0 and $_FILES['profileimg']['size'] < 1048576 and strcmp($_FILES['profileimg']['type'], 'image/jpeg') == 0) {
         uploadImg($user['username'], $_FILES['profileimg']);
         $db->update($user['username'], null, null, null, null
-            , null, "public/img/profile/" . $user['username'] . '.jpg');
+            , null, "assets/img/profile/" . $user['username'] . '.jpg');
         header('location:profile.php');
     } elseif ($_FILES['profileimg']['size'] > 1048590 or strcmp($_FILES['profileimg']['type'], 'image/jpeg') != 0){
         ?>

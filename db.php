@@ -17,7 +17,9 @@ class DataBase
     function save($username, $email, $password)
     {
         $password = md5($password);
-        $this->conn->exec("INSERT INTO `user` (`username`, `email`, `password`, `profile`) VALUES ('$username','$email','$password', 'public/img/vector.jpg')");
+        $this->conn->exec("INSERT INTO `user` (`username`, `email`, `password`, `profile`) VALUES ('$username','$email','$password', 'assets/img/vector.jpg')");
+        $this->conn->exec("INSERT INTO `middle`(`username`) VALUES ('$username')");
+        //$this->conn->exec();
         //echo "INSERT INTO `user` (`username`, `email`, `password`) VALUES ('$username','$email','$password', 'public/img/vector.jpg')";
     }
 
@@ -67,7 +69,7 @@ class DataBase
 
     function delete($username = '', $email = ''){
         $this->conn->exec("DELETE FROM `user` WHERE `username` = '$username' OR `email` = '$email'");
-        echo "DELETE FROM `user` WHERE `username` = '$username' OR `email` = '$email'";
+
     }
 
 }

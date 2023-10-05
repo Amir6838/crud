@@ -2,8 +2,9 @@
 include('db.php');
 $db = new DataBase();
 session_start();
-var_dump($_POST);
-var_dump($_SESSION);
+if (isset($_SESSION['login'])) {
+    header('location:index.php');
+}
 //var_dump($db->search('','',$_POST['password']));
 if (!empty($_POST['email']) and !empty($_POST['password'])) {
     $user = $db->search('', $_POST['email']);
@@ -12,6 +13,7 @@ if (!empty($_POST['email']) and !empty($_POST['password'])) {
         if (strcmp($user['password'], md5($_POST['password'])) == 0) {
             $_SESSION['username'] = $user['username'];
             $_SESSION['login'] = true;
+            $_SESSION['profile'] = $user['profile'];
         }
         if (isset($_SESSION['login'])) {
             header('location:index.php');
