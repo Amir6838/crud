@@ -17,8 +17,8 @@ class DataBase
     function save($username, $email, $password)
     {
         $password = md5($password);
-        $this->conn->exec("INSERT INTO `user` (`username`, `email`, `password`) VALUES ('$username','$email','$password')");
-        echo "INSERT INTO `user` (`username`, `email`, `password`) VALUES ('$username','$email','$password')";
+        $this->conn->exec("INSERT INTO `user` (`username`, `email`, `password`, `profile`) VALUES ('$username','$email','$password', 'public/img/vector.jpg')");
+        //echo "INSERT INTO `user` (`username`, `email`, `password`) VALUES ('$username','$email','$password', 'public/img/vector.jpg')";
     }
 
     function search($username = '', $email = '', $password = ''){
@@ -40,29 +40,32 @@ class DataBase
         }
 
         if ($email != null and strcmp($email , '') != 0){
-            $query .= "`$email`='$email',";
+            $query .= "`email`='$email',";
         }
 
         if ($password != null and strcmp($password , '') != 0){
-            $query .= "`$password`='$password',";
+            $query .= "`password`=" . "'" . md5($password) . "'" . ",";
         }
 
         if ($fname != null and strcmp($fname , '') != 0){
-            $query .= "`username`='$fname',";
+            $query .= "`fname`='$fname',";
         }
 
         if ($lname != null and strcmp($lname , '') != 0){
-            $query .= "`username`='$lname',";
+            $query .= "`lname`='$lname',";
         }
 
         if ($profile != null and strcmp($profile , '') != 0){
-            $query .= "`username`='$profile',";
+            $query .= "`profile`='$profile',";
         }
-        $query = substr($query,0,-1) . "WHERE `username` = $usernameid";
-        echo $query;
-        //$this->conn->exec($query);
+
+        $query = substr($query,0,-1) . "WHERE `username` = '$usernameid'";
+        //echo $query;
+        $this->conn->exec($query);
 
     }
+
+
 
 }
 

@@ -1,26 +1,63 @@
 <?php
 session_start();
 include('db.php');
-var_dump($_POST);
-var_dump($_FILES);
+include('image_service.php');
+
 if ($_SESSION['login']) {
     $db = new DataBase();
     $user = $db->search($_SESSION['username']);
-    var_dump($user);
 } else {
     header('location:index.php');
 }
 
+if (!empty($_FILES)) {
+    if ($_FILES['profileimg']['size'] > 0 and $_FILES['profileimg']['size'] < 1048576 and strcmp($_FILES['profileimg']['type'], 'image/jpeg') == 0) {
+        uploadImg($user['username'], $_FILES['profileimg']);
+        $db->update($user['username'], null, null, null, null
+            , null, "public/img/profile/" . $user['username'] . '.jpg');
+    }
+}
+
+
 if (!empty($_POST)) {
     if (strcmp($_POST['password'], $_POST['newpassword']) == 0) {
         if (strcmp(md5($_POST['password']), $user['password']) == 0) {
-            if (strcmp($user['username'], $_POST['username']) == 0) {
-                $db->update($user['username'], $_POST['username'], $_POST['email'], $_POST['password'], $_POST['fname']
-                    , $_POST['lname'], $_POST['profile']);
+
+            if (strcmp($user['username'], $_POST['username']) == 0 and strcmp($user['email'], $_POST['email']) == 0) {
+                $db->update($user['username'], null, null, null, $_POST['fname']
+                    , $_POST['lname'], null);
+                session_destroy();
+                //header('location:login.php');
+                ?>
+
+                <div class="alert alert-success container" role="alert">
+                    ویرایش شما با موفقیت انجام شد
+                </div>
+                <?php
+
+            } else {
+                if (!empty($_POST['username']) and !empty($_POST['email'])) {
+                    if ($db->search($_POST['username'], $_POST['email']) == false) {
+                        ?>
+                        <?php
+                    } else {
+                        $db->update($user['username'], $_POST['username'], $_POST['email'], null, $_POST['fname']
+                            , $_POST['lname'], null);
+                        session_destroy();
+                        ?>
+                        <div class="alert alert-success container" role="alert">
+                            ویرایش شما با موفقیت انجام شد
+                        </div>
+                        <?php
+                        session_destroy();
+                        //header('location:login.php');
+                    }
+                }
             }
         }
     }
 }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -44,7 +81,7 @@ if (!empty($_POST)) {
         <div class="col-md-4 border-right">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                 <img class="rounded-circle mt-5"
-                     src="<?php echo ($user['profile'] != NULL) ? $user['profile'] : 'public/img/vector.jpg' ?>"
+                     src="<?php echo $user['profile']; ?>"
                      width="90">
                 <span class="font-weight-bold">John Doe</span>
                 <span class="text-black-50">john_doe12@bbb.com</span>
@@ -60,19 +97,21 @@ if (!empty($_POST)) {
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-6"><input type="text"
-                                                 name="firstname" class="form-control"
-                                                 placeholder="<?php echo ($user['fname'] != NULL) ? $user['fname'] : 'The Fname is not set'; ?>">
+                                                 name="fname" class="form-control"
+                                                 placeholder="The Fname is not set"
+                                                 value="<?php echo ($user['fname'] != NULL) ? $user['fname'] : null; ?>">
                     </div>
                     <div class="col-md-6"><input type="text"
-                                                 name="lastname" class="form-control"
-                                                 placeholder="<?php echo ($user['lname'] != NULL) ? $user['lname'] : 'The Lname is not set'; ?>">
+                                                 name="lname" class="form-control"
+                                                 value="<?php echo ($user['lname'] != NULL) ? $user['lname'] : null; ?>"
+                                                 placeholder="The Lname is not set">
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-6"><input type="text" name="username" class="form-control"
-                                                 placeholder="<?php echo $user['username']; ?>"></div>
+                                                 value="<?php echo $user['username']; ?>"></div>
                     <div class="col-md-6"><input type="text" name="email" class="form-control"
-                                                 placeholder="<?php echo $user['email']; ?>"
+                                                 value="<?php echo $user['email']; ?>"
                         ></div>
                 </div>
                 <div class="row mt-3">

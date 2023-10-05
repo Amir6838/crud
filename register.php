@@ -3,7 +3,7 @@ include('db.php');
 $db = new DataBase();
 var_dump($_POST);
 if (!empty($_POST['username']) and !empty($_POST['email'])) {
-    if ($db->search($_POST['username'], $_POST['email'] == false)) {
+    if ($db->search($_POST['username'], $_POST['email']) != false) {
         ?>
         <div class="alert alert-danger container" role="alert">
             کاربری با این ایمیل و یا نام کاربری ثبت نام کرده است
