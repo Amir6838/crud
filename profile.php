@@ -14,7 +14,7 @@ if (!empty($_FILES)) {
         $db->update($user['username'], null, null, null, null
             , null, "assets/img/profile/" . $user['username'] . '.jpg');
         header('location:profile.php');
-    } elseif ($_FILES['profileimg']['size'] > 1048590 or strcmp($_FILES['profileimg']['type'], 'image/jpeg') != 0){
+    } elseif ($_FILES['profileimg']['size'] > 1048590 or strcmp($_FILES['profileimg']['type'], 'image/jpeg') != 0) {
         ?>
         <div class="alert alert-danger container" role="alert">
             The format of the profile picture should be jpg and its size should be less than 1 megabyte
@@ -58,9 +58,24 @@ if (!empty($_POST)) {
                 }
             }
         }
+    } elseif (strcmp(md5($_POST['password']), $user['password']) == 0) {
+        if ($db->search($_POST['username'], $_POST['email']) == false) {
+            ?>
+            <?php
+        } else {
+            $db->update($user['username'], $_POST['username'], $_POST['email'], $_POST['newpassword'], $_POST['fname']
+                , $_POST['lname'], null);
+            session_destroy();
+            ?>
+            <div class="alert alert-success container" role="alert">
+                ویرایش شما با موفقیت انجام شد
+            </div>
+            <?php
+            session_destroy();
+            header('location:login.php');
+        }
     }
 }
-
 ?>
 <!doctype html>
 <html lang="en">

@@ -143,7 +143,6 @@ if (isset($_GET)) {
         <div class="container">
             <p>
                 Example inner page template
-                <?php var_dump($_SESSION); ?>
             </p>
         </div>
     </section>
