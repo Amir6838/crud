@@ -44,7 +44,7 @@ if (isset($_GET)){
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="index.php?edit">Edit Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Delete Account</a></li>
+                        <li><a class="dropdown-item" href="delete.php">Delete Account</a></li>
                         <li><a class="dropdown-item" href="#">Change Password</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="index.php?exit">Exit</a></li>

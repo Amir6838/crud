@@ -65,7 +65,10 @@ class DataBase
 
     }
 
-
+    function delete($username = '', $email = ''){
+        $this->conn->exec("DELETE FROM `user` WHERE `username` = '$username' OR `email` = '$email'");
+        echo "DELETE FROM `user` WHERE `username` = '$username' OR `email` = '$email'";
+    }
 
 }
 

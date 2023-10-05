@@ -2,8 +2,6 @@
 session_start();
 include('db.php');
 include('image_service.php');
-var_dump($_SESSION);
-var_dump($_FILES);
 if ($_SESSION['login']) {
     $db = new DataBase();
     $user = $db->search($_SESSION['username']);
@@ -15,7 +13,13 @@ if (!empty($_FILES)) {
         uploadImg($user['username'], $_FILES['profileimg']);
         $db->update($user['username'], null, null, null, null
             , null, "public/img/profile/" . $user['username'] . '.jpg');
-        //header('location:profile.php');
+        header('location:profile.php');
+    } elseif ($_FILES['profileimg']['size'] > 1048590 or strcmp($_FILES['profileimg']['type'], 'image/jpeg') != 0){
+        ?>
+        <div class="alert alert-danger container" role="alert">
+            The format of the profile picture should be jpg and its size should be less than 1 megabyte
+        </div>
+        <?php
     }
 }
 if (!empty($_POST)) {
@@ -26,7 +30,7 @@ if (!empty($_POST)) {
                 $db->update($user['username'], null, null, null, $_POST['fname']
                     , $_POST['lname'], null);
                 session_destroy();
-                //header('location:login.php');
+                header('location:login.php');
                 ?>
 
                 <div class="alert alert-success container" role="alert">
@@ -49,7 +53,7 @@ if (!empty($_POST)) {
                         </div>
                         <?php
                         session_destroy();
-                        //header('location:login.php');
+                        header('location:login.php');
                     }
                 }
             }
@@ -82,9 +86,10 @@ if (!empty($_POST)) {
                 <img class="rounded-circle mt-5"
                      src="<?php echo $user['profile']; ?>"
                      width="90">
-                <span class="font-weight-bold">John Doe</span>
-                <span class="text-black-50">john_doe12@bbb.com</span>
-                <span>United States</span></div>
+                <span class="font-weight-bold"><?php echo $user['username'] ?></span>
+                <span class="text-black-50"><?php echo $user['email'] ?></span>
+                <span class="mt-4">To edit the profile, except for the profile picture, you must enter the password</span>
+            </div>
         </div>
         <div class="col-md-8">
             <div class="p-3 py-5">
